@@ -4,8 +4,8 @@
  *
  */ 
 
-#ifndef tnode_H_
-#define tnode_H_
+#ifndef MUTATION_H_
+#define MUTATION_H_
 
 #include <stdbool.h>
 #include "common.h"
@@ -106,24 +106,26 @@ void apply_point(char *seq, mutation *mut);
 char *apply_insert(char **seq, mutation *mut);
 
 /**
- * \brief Apply a frameshift mutation.
+ * \brief Apply a del mutation.
  *
- * \param seq     A pointer to the sequence.
- * \param mut     Mutation object.
- * \return        A pointer to the sequence (will only change if memory has been reallocated).
- */
-void apply_del(char *seq, mutation *mut);
-
-/**
- * \brief Apply a frameshift mutation.
- *
- * Reallocate memory. Save space but is much less efficient than apply_del.
+ * This function will *not* reallocate memory (see apply_del_realloc). 
  * 
  * \param seq     A pointer to the sequence.
  * \param mut     Mutation object.
- * \return        A pointer to the sequence (will only change if memory has been reallocated).
+ * \return        A pointer to the sequence.
  */
-void apply_del_realloc(char *seq, mutation *mut)
+char *apply_del(char **seq, mutation *mut);
+
+/**
+ * \brief Apply a del mutation.
+ *
+ * Reallocate memory. Save space but is less efficient than apply_del.
+ * 
+ * \param seq     A pointer to the sequence.
+ * \param mut     Mutation object.
+ * \return        A pointer to the sequence.
+ */
+char *apply_del_realloc(char **seq, mutation *mut);
 
 #ifdef __cplusplus
 }
