@@ -8,7 +8,7 @@ ANSI C. See TESTS for a list of compiler tested.
 
 License
 -------
-MIT <http://www.opensource.org/licenses/mit-license.php>
+GPLv2+ <http://www.opensource.org/licenses/gpl-2.0.php>.
 
 Author
 ------
@@ -18,4 +18,4 @@ Philippe Desjardins-Proulx
 
 Dependencies
 ------------
-None (for now).
+gsl <http://www.gnu.org/s/gsl/>
