@@ -2,6 +2,11 @@ deVries
 =======
 Efficient data-structures to handle mutations and mutation profiles.
 
+Design
+------
+The library is made to be fast, straighforward & simple to use. All functions
+are documented and tests/examples are provided.
+
 Language
 --------
 ANSI C. See TESTS for a list of compiler tested.
@@ -18,4 +23,5 @@ Philippe Desjardins-Proulx
 
 Dependencies
 ------------
-gsl <http://www.gnu.org/s/gsl/>
+* gsl <http://www.gnu.org/s/gsl/>
+* libxml2 or some other library will probably be needed
