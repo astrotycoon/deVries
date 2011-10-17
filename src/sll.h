@@ -3,8 +3,8 @@
  * \brief A simple generic singly linked list.
  */ 
 
-#ifndef sll_H_
-#define sll_H_
+#ifndef SLL_H_
+#define SLL_H_
 
 /**
  * \brief The generic node of a singly linked list.
@@ -22,8 +22,6 @@ sllnode;
  */
 typedef struct
 {
-    unsigned int length; /**< Number of elements in the list. */
-
     sllnode *head; /**< First element of the list. */
 
     sllnode *tail; /**< Last element of the list. */
@@ -103,7 +101,7 @@ unsigned int sll_rm(sll *l, int foo(sllnode *node));
  * \param n    The index of the node to return
  * \return     A pointer to the nth node.
  */
-sllnode *sll_get(const sll *l, int n);
+sllnode *sll_get(const sll *l, unsigned int n);
 
 /**
  * \brief Generates an array from the data inside all the nodes.
@@ -114,12 +112,12 @@ sllnode *sll_get(const sll *l, int n);
 void **sll_as_array(const sll *l);
 
 /**
- * \brief Make sure the list has the same number of elements as 'length'.
+ * \brief Return the length.
  * 
  * \param sll  The singly linked list.
- * \return     0 if it doesn't match or the length of the list if it does.
+ * \return     Number of nodes in the list.
  */
-unsigned int sll_check_length(const sll *l);
+unsigned int sll_length(const sll *l);
 
 /**
  * \brief Free the memory of the list.

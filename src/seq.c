@@ -57,12 +57,12 @@ void read_fasta_file(const char* filename, unsigned int n, Fasta_seq *fasta)
     fclose(fp);
 }
 
-M_INLINE char dna_random_nuc(gsl_rng *rng)
+DV_INLINE char dna_random_nuc(gsl_rng *rng)
 {
     return "ATGC"[(int)(gsl_rng_uniform(rng) * 4)];
 }
 
-M_INLINE char dna_random_nuc_prob(gsl_rng *rng, double prob_a, double prob_t, double prob_g)
+DV_INLINE char dna_random_nuc_prob(gsl_rng *rng, double prob_a, double prob_t, double prob_g)
 {
     const double r = gsl_rng_uniform(rng);
     if (r < prob_a)
@@ -83,7 +83,7 @@ M_INLINE char dna_random_nuc_prob(gsl_rng *rng, double prob_a, double prob_t, do
     }
 }
 
-M_INLINE char * dna_random_nuc_seq(gsl_rng *rng, int seq_size)
+DV_INLINE char * dna_random_nuc_seq(gsl_rng *rng, int seq_size)
 {
     assert(seq_size > 0);
     char *dna_seq = (char*)malloc(seq_size + 1);
@@ -97,12 +97,12 @@ M_INLINE char * dna_random_nuc_seq(gsl_rng *rng, int seq_size)
     return dna_seq;
 }
 
-M_INLINE char rna_random_nuc(gsl_rng *rng)
+DV_INLINE char rna_random_nuc(gsl_rng *rng)
 {
     return "AUGC"[(int)(gsl_rng_uniform(rng) * 4)];
 }
 
-M_INLINE char rna_random_nuc_prob(gsl_rng *rng, double prob_a, double prob_u, double prob_g)
+DV_INLINE char rna_random_nuc_prob(gsl_rng *rng, double prob_a, double prob_u, double prob_g)
 {
     const double r = gsl_rng_uniform(rng);
     if (r < prob_a)
@@ -123,7 +123,7 @@ M_INLINE char rna_random_nuc_prob(gsl_rng *rng, double prob_a, double prob_u, do
     }
 }
 
-M_INLINE char* rna_random_nuc_seq(gsl_rng *rng, int seq_size)
+DV_INLINE char* rna_random_nuc_seq(gsl_rng *rng, int seq_size)
 {
     assert(seq_size > 0);
     char *rna_seq = (char*)malloc(seq_size + 1);
@@ -137,7 +137,7 @@ M_INLINE char* rna_random_nuc_seq(gsl_rng *rng, int seq_size)
     return rna_seq;
 }
 
-M_INLINE unsigned int seq_count(const char *seq, const char c)
+DV_INLINE unsigned int seq_count(const char *seq, const char c)
 {
     int i = -1;
     unsigned int count = 0;
@@ -148,32 +148,32 @@ M_INLINE unsigned int seq_count(const char *seq, const char c)
     return count;
 }
 
-M_INLINE unsigned int a_count(const char *seq)
+DV_INLINE unsigned int a_count(const char *seq)
 {
     return seq_count(seq, 'A');
 }
 
-M_INLINE unsigned int t_count(const char *seq)
+DV_INLINE unsigned int t_count(const char *seq)
 {
     return seq_count(seq, 'T');
 }
 
-M_INLINE unsigned int u_count(const char *seq)
+DV_INLINE unsigned int u_count(const char *seq)
 {
     return seq_count(seq, 'U');
 }
 
-M_INLINE unsigned int g_count(const char *seq)
+DV_INLINE unsigned int g_count(const char *seq)
 {
     return seq_count(seq, 'G');
 }
 
-M_INLINE unsigned int c_count(const char *seq)
+DV_INLINE unsigned int c_count(const char *seq)
 {
     return seq_count(seq, 'C');
 }
 
-M_INLINE unsigned int gc_count(const char *seq)
+DV_INLINE unsigned int gc_count(const char *seq)
 {
     int i = -1;
     unsigned int count = 0;
@@ -184,7 +184,7 @@ M_INLINE unsigned int gc_count(const char *seq)
     return count;
 }
 
-M_INLINE double gc_content(const char *seq)
+DV_INLINE double gc_content(const char *seq)
 {
     int i = -1;
     unsigned int count = 0;
@@ -195,7 +195,7 @@ M_INLINE double gc_content(const char *seq)
     return (double)count / i;
 }
 
-M_INLINE int dna_pure_seq(const char *dna_seq)
+DV_INLINE int dna_pure_seq(const char *dna_seq)
 {
     int i = 0;
     while (dna_seq[i] != '\0')
@@ -212,7 +212,7 @@ M_INLINE int dna_pure_seq(const char *dna_seq)
     return TRUE;
 }
 
-M_INLINE int rna_pure_seq(const char *rna_seq)
+DV_INLINE int rna_pure_seq(const char *rna_seq)
 {
     int i = 0;
     while (rna_seq[i] != '\0')
@@ -229,7 +229,7 @@ M_INLINE int rna_pure_seq(const char *rna_seq)
     return TRUE;
 }
 
-M_INLINE char *dna_rmv_amb(char *dna_seq)
+DV_INLINE char *dna_rmv_amb(char *dna_seq)
 {
     char *new_dna_seq = (char*)malloc(strlen(dna_seq));
 
@@ -247,7 +247,7 @@ M_INLINE char *dna_rmv_amb(char *dna_seq)
     return new_dna_seq;
 }
 
-M_INLINE char *rna_rmv_amb(char *rna_seq)
+DV_INLINE char *rna_rmv_amb(char *rna_seq)
 {
     char *new_rna_seq = (char*)malloc(strlen(rna_seq));
 
@@ -265,7 +265,7 @@ M_INLINE char *rna_rmv_amb(char *rna_seq)
     return new_rna_seq;
 }
 
-M_INLINE char *dna_antisense(const char *dna_seq)
+DV_INLINE char *dna_antisense(const char *dna_seq)
 {
     //assert(dna_pure_seq(char *dna_seq));
     const int seq_len = strlen(dna_seq);
@@ -294,7 +294,7 @@ M_INLINE char *dna_antisense(const char *dna_seq)
     return dna_antisense;
 }
 
-M_INLINE char* transcription(const char* dna_seq)
+DV_INLINE char* transcription(const char* dna_seq)
 {
     //assert(dna_pure_seq(const char *dna_seq));
     const int seq_len = strlen(dna_seq);
@@ -315,7 +315,7 @@ M_INLINE char* transcription(const char* dna_seq)
     return rna_seq;
 }
 
-M_INLINE char *translation(const char *rna_seq)
+DV_INLINE char *translation(const char *rna_seq)
 {
     //assert(rna_pure_seq(rna_seq);
     const int n_amino = strlen(rna_seq) / 3;

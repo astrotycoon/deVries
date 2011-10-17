@@ -3,28 +3,26 @@
 #include "devries.h"
 #include "sll.h"
 
-void sll_init()
+void sll_init(sll *l)
 {
-    sll->length = 0;
     sll->head = NULL;
     sll->tail = NULL;
 }
 
-void sll_add_head(, void *data)
+void sll_add_head(sll *l, void *data)
 {
     sllnode *new_node = (sllnode*)malloc(sizeof(sllnode));
     new_node->data = data;
     new_node->next = sll->head;
     sll->head = new_node;
     
-    if (sll->length == 0)
+    if (sll->tail == NULL)
     {
         sll->tail = new_node;
     }
-    ++(sll->length);
 }
 
-void sll_add_after(, sllnode *node, void *data)
+void sll_add_after(sll *l, sllnode *node, void *data)
 {
     assert(node != NULL);
     sllnode *new_node = (sllnode*)malloc(sizeof(sllnode));
@@ -36,26 +34,23 @@ void sll_add_after(, sllnode *node, void *data)
     {
         sll->tail = new_node;
     }
-    ++(sll->length);
 }
 
-void sll_add_tail(, void *data)
+void sll_add_tail(sll *l, void *data)
 {
     sllnode *new_node = (sllnode*)malloc(sizeof(sllnode));
     new_node->data = data;
     new_node->next = NULL;
     
-    if (sll->length == 0)
+    if (sll->head == NULL)
     {
         sll->head = new_node;
-        sll->tail = new_node;
     }
     else
     {
         sll->tail->next = new_node;
-        sll->tail = new_node;
     }
-    ++(sll->length);
+    sll->tail = new_node;
 }
 
 int sll_rm_next(, sllnode *node)
@@ -66,7 +61,7 @@ int sll_rm_next(, sllnode *node)
     {
         return false;
     }
-    // Remove the head;
+
     if (node == NULL)
     {
         old_node = sll->head;
@@ -92,8 +87,7 @@ int sll_rm_next(, sllnode *node)
     // FREE THE MEMORY OF THE OLD NODE !!!  //
     //////////////////////////////////////////
     free(old_node);
-    
-    --(sll->length);
+
     return TRUE;
 }
 
@@ -102,7 +96,7 @@ void sll_rm_all()
     while(sll_rm_next(sll, NULL));
 }
 
-unsigned int sll_rm(, int foo(sllnode *node))
+unsigned int sll_rm(sll *l, int foo(sllnode *node))
 {
     unsigned int removed = 0;
 
@@ -121,38 +115,31 @@ unsigned int sll_rm(, int foo(sllnode *node))
             node = node->next;
         }
     }
-    
     return removed;
 }
 
-sllnode *sll_get(, int n)
+sllnode *sll_get(sll *l, int n)
 {
-    if (n < 0 || n >= sll->length)
+    if (n < 0)
     {
         return NULL;
     }
     if (n == 0)
     {
         return sll->head;
-    }
-    if (n == sll->length - 1)
-    {
-        return sll->tail;
-    }
-    
+    }    
     sllnode *node = sll->head;
-    int i;
-    for (i = 0; i < n; ++i)
+    int i = 0;
+    for (; i < n; ++i)
     {
         node = node->next;
     }
     return node;
 }
 
-void **sll_as_array()
+void **sll_as_array(sll *l)
 {
-    assert(sll_check_length(sll));
-    void **data = (void**)malloc(sll->length * sizeof(void*));
+    void **data = (void**)malloc(sll_length(l) * sizeof(void*));
 
     int i = 0;
     sllnode *node = sll->head;
@@ -163,7 +150,7 @@ void **sll_as_array()
     return data;
 }
 
-unsigned int sll_check_length(const )
+unsigned int sll_length(const sll *l)
 {
     unsigned int length = 0;
     sllnode *node = sll->head;
@@ -172,7 +159,6 @@ unsigned int sll_check_length(const )
         ++length;
         node = node->next;
     }
-    return (length == sll->length) ? length : 0;
+    return length;
 }
 
-void sll_free();

@@ -9,10 +9,10 @@
 #define FALSE 0
 #endif
 
-#ifdef MINLINING
-#define MINLINE inline
+#ifdef DEVRIES_INLINING
+#define DV_INLINE inline
 #else
-#define MINLINE
+#define DV_INLINE
 #endif
 
 #ifndef NULL

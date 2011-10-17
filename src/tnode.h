@@ -23,6 +23,8 @@ typedef struct tnode_
     char *name; /**< Name of the node. */
 
     struct tnode_ *p; /**< Pointer to the parent. */
+
+    unsigned int n; /**< Number of children. */
     
     sll *children; /**< Singly linked list of children. */
 
@@ -47,18 +49,6 @@ tnode *tnode_init(tnode *p, char *name, void *data);
  * \param child   The new kid.
  */
 void tnode_add_children(tnode *t, tnode *child);
-
-#ifndef NDEBUG
-/**
- * \brief Get the number of children in the node.
- *
- * \param t     The tnode object.
- * \return      Number of children in the node.
- */
-unsigned int tnode_children(tnode *t);
-#else
-#define tnode_children(t)    ((t)->children->length)
-#endif
 
 /**
  * \brief Number of edges in the subtree.

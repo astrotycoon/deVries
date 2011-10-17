@@ -20,18 +20,11 @@ tnode *tnode_init(tnode *p, char *name, void *data)
     return t;
 }
 
-M_INLINE void tnode_set_children(tnode *t, tnode *l, tnode *r)
+DV_INLINE void tnode_add_children(tnode *t, tnode *child)
 {
-    t->l = l;
-    t->r = r;
+    ++(t->n);
+    sll_add_tail((t)->children,(void*)(child))
 }
-
-#ifndef NDEBUG
-M_INLINE unsigned int tnode_children(tnode *t)
-{
-    return t->children->length;
-}
-#endif
 
 unsigned int tnode_nedges(tnode *t)
 {
@@ -55,19 +48,19 @@ unsigned int tnode_toroot(tnode *t)
 }
 
 #ifndef NDEBUG
-M_INLINE int tnode_leaf(tnode *t)
+DV_INLINE int tnode_leaf(tnode *t)
 {
-    return (t->children->length == 0);
+    return (t->n == 0);
 }
 
-M_INLINE int tnode_root(tnode *t)
+DV_INLINE int tnode_root(tnode *t)
 {
     return (t->p == NULL);
 }
 
-M_INLINE int tnode_internal(tnode *t)
+DV_INLINE int tnode_internal(tnode *t)
 {
-    return ((t->children->length > 0) && t->p != NULL);
+    return ((t->n > 0) && t->p != NULL);
 }
 #endif
 
