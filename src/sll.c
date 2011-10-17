@@ -24,7 +24,10 @@ void sll_add_head(sll *l, void *data)
 
 void sll_add_after(sll *l, sllnode *node, void *data)
 {
-    assert(node != NULL);
+    if (node == NULL)
+    {
+        sll_add_head(l, data);
+    }
     sllnode *new_node = (sllnode*)malloc(sizeof(sllnode));
     new_node->data = data;
     new_node->next = node->next;
@@ -53,15 +56,14 @@ void sll_add_tail(sll *l, void *data)
     sll->tail = new_node;
 }
 
-int sll_rm_next(, sllnode *node)
+int sll_rm_next(sll *l, sllnode *node)
 {
     sllnode *old_node;
 
-    if (sll->length == 0)
+    if (sll->head == NULL)
     {
-        return false;
+        return FALSE;
     }
-
     if (node == NULL)
     {
         old_node = sll->head;
@@ -73,7 +75,6 @@ int sll_rm_next(, sllnode *node)
         {
             return FALSE;
         }
-
         old_node = node->next;
         node->next = node->next->next;
 
@@ -91,7 +92,7 @@ int sll_rm_next(, sllnode *node)
     return TRUE;
 }
 
-void sll_rm_all()
+void sll_rm_all(sll *l)
 {
     while(sll_rm_next(sll, NULL));
 }
@@ -118,19 +119,19 @@ unsigned int sll_rm(sll *l, int foo(sllnode *node))
     return removed;
 }
 
-sllnode *sll_get(sll *l, int n)
+sllnode *sll_get(sll *l, unsigned int i)
 {
-    if (n < 0)
+    if (i < 0)
     {
         return NULL;
     }
-    if (n == 0)
+    if (i == 0)
     {
         return sll->head;
     }    
     sllnode *node = sll->head;
-    int i = 0;
-    for (; i < n; ++i)
+    unsigned int j = 0;
+    for (; j < i; ++j)
     {
         node = node->next;
     }
@@ -161,4 +162,3 @@ unsigned int sll_length(const sll *l)
     }
     return length;
 }
-
