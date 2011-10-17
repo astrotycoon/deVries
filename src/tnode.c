@@ -26,14 +26,27 @@ M_INLINE void tnode_set_children(tnode *t, tnode *l, tnode *r)
     t->r = r;
 }
 
-unsigned int tnode_numedges(tnode *t)
+#ifndef NDEBUG
+M_INLINE unsigned int tnode_children(tnode *t)
 {
-    return (t->l == NULL) ? 0 : 2 + tnode_numedges(t->l) + tnode_numedges(t->r);
+    return t->children->length;
+}
+#endif
+
+unsigned int tnode_nedges(tnode *t)
+{
+    unsigned int nedges = 0;
+    sllnode *n = t->children->head;
+    for (; n != NULL; n = n->next)
+    {
+        nedges += tnode_nedges((tnode*)(n->data));
+    }
+    return nedges;
 }
 
-unsigned int tnode_numleaves(tnode *t)
+unsigned int tnode_nleaves(tnode *t)
 {
-    return 1 + tnode_numedges(t) / 2;
+    return 1 + tnode_nedges(t) / 2;
 }
 
 unsigned int tnode_toroot(tnode *t)
@@ -41,25 +54,10 @@ unsigned int tnode_toroot(tnode *t)
     return (t->p == NULL) ? 0 : 1 + tnode_toroot(t->p);
 }
 
-int tnode_sbinary(tnode *t)
-{
-    if (t->l == NULL && t->r == NULL)
-    {
-        return TRUE;
-    }
-    else if (t->l != NULL && t->r != NULL)
-    {
-        return (tnode_sbinary(t->l) && tnode_sbinary(t->r));
-    }
-    else
-    {
-        return FALSE;
-    }
-}
-
+#ifndef NDEBUG
 M_INLINE int tnode_leaf(tnode *t)
 {
-    return (t->l == NULL);
+    return (t->children->length == 0);
 }
 
 M_INLINE int tnode_root(tnode *t)
@@ -69,12 +67,14 @@ M_INLINE int tnode_root(tnode *t)
 
 M_INLINE int tnode_internal(tnode *t)
 {
-    return (t->p != NULL && t->l != NULL);
+    return ((t->children->length > 0) && t->p != NULL);
 }
+#endif
 
-char *tnode_simple_newick(tnode *t)
+char *tnode_newick(tnode *t)
 {
     char *str;
+    /*
     if (tnode_leaf(t))
     {
         str = (char*)malloc(strlen(t->name) + 2);
@@ -104,11 +104,13 @@ char *tnode_simple_newick(tnode *t)
         free(lnewick);
         free(rnewick);
     }
+    */
     return str;
 }
 
 void tnode_free(tnode *t)
 {
+    /*
     if (t->l != NULL)
     {
         tnode_free(t->l);
@@ -120,4 +122,5 @@ void tnode_free(tnode *t)
     free(t->name);
     t->data = NULL;
     free(t);
+    */
 }

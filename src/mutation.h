@@ -70,7 +70,7 @@ char *get_sequence(tnode *node);
  * \param node    Node of the mutation tree.
  * \return        Singly-linked list with all mutations.
  */
-SLL *list_mutations(tnode *node);
+sll *list_mutations(tnode *node);
 
 /**
  * \brief Apply a mutation to a sequence.

@@ -1,21 +1,21 @@
 /*! \file
  *
- * \brief A simple generic singly linked list
+ * \brief A simple generic singly linked list.
  */ 
 
-#ifndef SLL_H_
-#define SLL_H_
+#ifndef sll_H_
+#define sll_H_
 
 /**
  * \brief The generic node of a singly linked list.
  */
-typedef struct SLLNode_
+typedef struct sllnode_
 {
-    struct SLLNode_ *next; /**< Next node. */
+    struct sllnode_ *next; /**< Next node. */
 
     void *data; /**< Data in the node. */
 }
-SLLNode;
+sllnode;
 
 /**
  * \brief A generic singly linked list.
@@ -24,18 +24,18 @@ typedef struct
 {
     unsigned int length; /**< Number of elements in the list. */
 
-    SLLNode *head; /**< First element of the list. */
+    sllnode *head; /**< First element of the list. */
 
-    SLLNode *tail; /**< Last element of the list. */
+    sllnode *tail; /**< Last element of the list. */
 }
-SLL;
+sll;
 
 /**
  * \brief Initialize a singly linked list object.
  * 
- * \param sll  The object to initialize.
+ * \param l  The object to initialize.
  */
-void SLL_init(SLL *sll);
+void sll_init(sll *l);
 
 /**
  * \brief Add a node at the beginning of the list.
@@ -43,7 +43,7 @@ void SLL_init(SLL *sll);
  * \param sll    The singly linked list.
  * \param data   The data in the new node.
  */
-void SLL_add_head(SLL *sll, void *data);
+void sll_add_head(sll *l, void *data);
 
 /**
  * \brief Add a node after the node supplied.
@@ -52,7 +52,7 @@ void SLL_add_head(SLL *sll, void *data);
  * \param node   The node just before the new node. Cannot be a NULL pointer.
  * \param data   The data in the new node.
  */
-void SLL_add_after(SLL *sll, SLLNode *node, void *data);
+void sll_add_after(sll *l, sllnode *node, void *data);
 
 /**
  * \brief Add a node at the end of the list.
@@ -60,7 +60,7 @@ void SLL_add_after(SLL *sll, SLLNode *node, void *data);
  * \param sll    The singly linked list.
  * \param data   The data in the new node.
  */
-void SLL_add_tail(SLL *sll, void *data);
+void sll_add_tail(sll *l, void *data);
 
 /**
  * \brief Remove the node next to the provided node.
@@ -72,26 +72,26 @@ void SLL_add_tail(SLL *sll, void *data);
  * \param node   The node before the node to be removed.
  * \return       1 (TRUE) is a node has been removed.
  */
-int SLL_rm_next(SLL *sll, SLLNode *node);
+int sll_rm_next(sll *l, sllnode *node);
 
 /**
  * \brief Remove all nodes.
  * 
  * \param sll  The singly linked list.
  */
-void SLL_rm_all(SLL *sll);
+void sll_rm_all(sll *l);
 
 /**
  * \brief Remove all nodes satisfying a condition set by a function.
  *
- * You must supply a function that will take a SLLNode pointer and return true
+ * You must supply a function that will take a sllnode pointer and return true
  * (anything except 0) for the node to stay in the list and 0 to remove the node.
  * 
  * \param sll  The singly linked list.
  * \param foo  The condition to decide if a node can stay or has to be removed.
  * \return     The number of nodes removed.
  */
-unsigned int SLL_rm(SLL *sll, int foo(SLLNode *node));
+unsigned int sll_rm(sll *l, int foo(sllnode *node));
 
 /**
  * \brief Return a pointer to the nth node in the list.
@@ -103,7 +103,7 @@ unsigned int SLL_rm(SLL *sll, int foo(SLLNode *node));
  * \param n    The index of the node to return
  * \return     A pointer to the nth node.
  */
-SLLNode *SLL_get(const SLL *sll, int n);
+sllnode *sll_get(const sll *l, int n);
 
 /**
  * \brief Generates an array from the data inside all the nodes.
@@ -111,7 +111,7 @@ SLLNode *SLL_get(const SLL *sll, int n);
  * \param sll  The singly linked list.
  * \return     A pointer to the array or void pointers.
  */
-void **SLL_as_array(const SLL *sll);
+void **sll_as_array(const sll *l);
 
 /**
  * \brief Make sure the list has the same number of elements as 'length'.
@@ -119,7 +119,7 @@ void **SLL_as_array(const SLL *sll);
  * \param sll  The singly linked list.
  * \return     0 if it doesn't match or the length of the list if it does.
  */
-unsigned int SLL_check_length(const SLL *sll);
+unsigned int sll_check_length(const sll *l);
 
 /**
  * \brief Free the memory of the list.
@@ -128,6 +128,6 @@ unsigned int SLL_check_length(const SLL *sll);
  * 
  * \param sll  The singly linked list to free.
  */
-void SLL_free(SLL *sll);
+void sll_free(sll *l);
 
 #endif

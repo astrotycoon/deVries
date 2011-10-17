@@ -1,18 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "common.h"
+#include "devries.h"
 #include "sll.h"
 
-void SLL_init(SLL *sll)
+void sll_init()
 {
     sll->length = 0;
     sll->head = NULL;
     sll->tail = NULL;
 }
 
-void SLL_add_head(SLL *sll, void *data)
+void sll_add_head(, void *data)
 {
-    SLLNode *new_node = (SLLNode*)malloc(sizeof(SLLNode));
+    sllnode *new_node = (sllnode*)malloc(sizeof(sllnode));
     new_node->data = data;
     new_node->next = sll->head;
     sll->head = new_node;
@@ -24,10 +24,10 @@ void SLL_add_head(SLL *sll, void *data)
     ++(sll->length);
 }
 
-void SLL_add_after(SLL *sll, SLLNode *node, void *data)
+void sll_add_after(, sllnode *node, void *data)
 {
     assert(node != NULL);
-    SLLNode *new_node = (SLLNode*)malloc(sizeof(SLLNode));
+    sllnode *new_node = (sllnode*)malloc(sizeof(sllnode));
     new_node->data = data;
     new_node->next = node->next;
     node->next = new_node;
@@ -39,9 +39,9 @@ void SLL_add_after(SLL *sll, SLLNode *node, void *data)
     ++(sll->length);
 }
 
-void SLL_add_tail(SLL *sll, void *data)
+void sll_add_tail(, void *data)
 {
-    SLLNode *new_node = (SLLNode*)malloc(sizeof(SLLNode));
+    sllnode *new_node = (sllnode*)malloc(sizeof(sllnode));
     new_node->data = data;
     new_node->next = NULL;
     
@@ -58,9 +58,9 @@ void SLL_add_tail(SLL *sll, void *data)
     ++(sll->length);
 }
 
-int SLL_rm_next(SLL *sll, SLLNode *node)
+int sll_rm_next(, sllnode *node)
 {
-    SLLNode *old_node;
+    sllnode *old_node;
 
     if (sll->length == 0)
     {
@@ -97,16 +97,16 @@ int SLL_rm_next(SLL *sll, SLLNode *node)
     return TRUE;
 }
 
-void SLL_rm_all(SLL *sll)
+void sll_rm_all()
 {
-    while(SLL_rm_next(sll, NULL));
+    while(sll_rm_next(sll, NULL));
 }
 
-unsigned int SLL_rm(SLL *sll, int foo(SLLNode *node))
+unsigned int sll_rm(, int foo(sllnode *node))
 {
     unsigned int removed = 0;
 
-    SLLNode *node = sll->head;
+    sllnode *node = sll->head;
 
     // rmv first
 
@@ -114,7 +114,7 @@ unsigned int SLL_rm(SLL *sll, int foo(SLLNode *node))
     {
         if (foo(node->next))
         {
-            SLL_rm_next(sll, node);
+            sll_rm_next(sll, node);
         }
         else
         {
@@ -125,7 +125,7 @@ unsigned int SLL_rm(SLL *sll, int foo(SLLNode *node))
     return removed;
 }
 
-SLLNode *SLL_get(SLL *sll, int n)
+sllnode *sll_get(, int n)
 {
     if (n < 0 || n >= sll->length)
     {
@@ -140,7 +140,7 @@ SLLNode *SLL_get(SLL *sll, int n)
         return sll->tail;
     }
     
-    SLLNode *node = sll->head;
+    sllnode *node = sll->head;
     int i;
     for (i = 0; i < n; ++i)
     {
@@ -149,13 +149,13 @@ SLLNode *SLL_get(SLL *sll, int n)
     return node;
 }
 
-void **SLL_as_array(SLL *sll)
+void **sll_as_array()
 {
-    assert(SLL_check_length(sll));
+    assert(sll_check_length(sll));
     void **data = (void**)malloc(sll->length * sizeof(void*));
 
     int i = 0;
-    SLLNode *node = sll->head;
+    sllnode *node = sll->head;
     for (; node != NULL; node = node->next)
     {
         data[i++] = node->data;
@@ -163,10 +163,10 @@ void **SLL_as_array(SLL *sll)
     return data;
 }
 
-unsigned int SLL_check_length(const SLL *sll)
+unsigned int sll_check_length(const )
 {
     unsigned int length = 0;
-    SLLNode *node = sll->head;
+    sllnode *node = sll->head;
     while (node != NULL)
     {
         ++length;
@@ -175,4 +175,4 @@ unsigned int SLL_check_length(const SLL *sll)
     return (length == sll->length) ? length : 0;
 }
 
-void SLL_free(SLL *sll);
+void sll_free();
