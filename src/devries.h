@@ -1,5 +1,5 @@
-#ifndef COMMON_H_
-#define COMMON_H_
+#ifndef DEVRIES_H_
+#define DEVRIES_H_
 
 #ifndef TRUE
 #define TRUE 1
