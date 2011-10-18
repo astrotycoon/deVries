@@ -27,7 +27,7 @@ typedef enum
     DNAorRNA = 3,
     Other = 4,
 }
-Sequence_type;
+sequence_type;
 
 /**
  * \brief A simple object to store FASTA sequences.
@@ -40,9 +40,9 @@ typedef struct
 
     unsigned int length; /**< Length of the sequence. */
 
-    Sequence_type type; /**< Type of sequence. */
+    sequence_type type; /**< Type of sequence. */
 }
-Fasta_seq;
+sequence;
 
 /**
  * \brief A compressed sequence represented by a bitfield.
@@ -55,18 +55,40 @@ typedef struct
 
     unsigned int capacity; /**< Capacity of the object. */
 }
-Compressed_Seq;
+cseq;
 
 /**
  * \brief Extract the nth sequence from a file in fasta format.
  *
- * Extract a sequence and store it in a Fasta_seq object.
+ * Extract a sequence and store it in a sequence object.
  * 
- * \param filename   Name of the FASTA file.
+ * \param filename   Name of the input file.
  * \param n          Index of the sequence.
- * \param fasta      A pointer to an unitialized Fasta_seq object.
+ * \param fasta      A pointer to an unitialized 'sequence' object.
  */
-void read_fasta_file(const char *filename, unsigned int n, Fasta_seq *fasta);
+void read_fasta(const char *filename, unsigned int n, sequence *seq);
+
+/**
+ * \brief Extract the nth sequence from a file in EMBL format.
+ *
+ * Extract a sequence and store it in a sequence object.
+ * 
+ * \param filename   Name of the input file.
+ * \param n          Index of the sequence.
+ * \param fasta      A pointer to an unitialized 'sequence' object.
+ */
+void read_embl(const char *filename, unsigned int n, sequence *seq);
+
+/**
+ * \brief Extract the nth sequence from a file in genbank format.
+ *
+ * Extract a sequence and store it in a sequence object.
+ * 
+ * \param filename   Name of the input file.
+ * \param n          Index of the sequence.
+ * \param fasta      A pointer to an unitialized 'sequence' object.
+ */
+void read_genbank(const char *filename, unsigned int n, sequence *seq);
 
 /**
  * \brief Return a random DNA nucleotide.
