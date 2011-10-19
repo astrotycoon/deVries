@@ -3,13 +3,13 @@
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_randist.h>
+#include <libxml/parser.h>
 #include "common.h"
 #include "gcode.h"
 #include "seq.h"
 
-void read_fasta_file(const char* filename, unsigned int n, Fasta_seq *fasta)
+// Currently broken
+void read_fasta(const char *filename, unsigned int n, sequence *seq)
 {
     FILE* input = fopen(filename, "r");
 
@@ -55,6 +55,32 @@ void read_fasta_file(const char* filename, unsigned int n, Fasta_seq *fasta)
     }
     fasta->type = get_type(fasta->seq);
     fclose(fp);
+}
+
+// Requires $(xml2-config --libs) $(xml2-config --cflags) to compile (after -o)
+void read_sequenceml(const char *filename, unsigned int n)
+{
+    xmlDoc *document;
+    xmlNode *root, *first_child, *node;
+    char *filename;
+
+    if (argc < 2)
+    {
+        fprintf(stderr, "Usage: %s filename.xml\n", argv[0]);
+        return EXIT_FAILURE;
+    }
+    filename = argv[1];
+
+    document = xmlReadFile(filename, NULL, 0);
+    root = xmlDocGetRootElement(document);
+    fprintf(stdout, "Root is <%s> (%i)\n", root->name, root->type);
+    first_child = root->children;
+
+    for (node = first_child; node; node = node->next)
+    {
+        fprintf(stdout, "\t Child is <%s> (%i)\n", node->name, node->type);
+    }
+    fprintf(stdout, "...\n");
 }
 
 DV_INLINE char dna_random_nuc(gsl_rng *rng)

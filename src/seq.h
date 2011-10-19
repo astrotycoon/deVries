@@ -7,8 +7,6 @@
 #define SEQ_H_
 
 #include <stdint.h>
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_randist.h>
 #include "devries.h"
 
 // For C++ compilers:
@@ -67,6 +65,17 @@ cseq;
  * \param fasta      A pointer to an unitialized 'sequence' object.
  */
 void read_fasta(const char *filename, unsigned int n, sequence *seq);
+
+/**
+ * \brief Extract the nth sequence from a file in sequenceml format.
+ *
+ * Extract a sequence and store it in a sequence object.
+ * 
+ * \param filename   Name of the input file.
+ * \param n          Index of the sequence.
+ * \param fasta      A pointer to an unitialized 'sequence' object.
+ */
+void read_sequenceml(const char *filename, unsigned int n, sequence *seq);
 
 /**
  * \brief Extract the nth sequence from a file in EMBL format.

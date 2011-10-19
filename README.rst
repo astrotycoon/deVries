@@ -33,5 +33,11 @@ GPLv2+ <http://www.opensource.org/licenses/gpl-2.0.php>.
 
 Dependencies
 ------------
-* gsl <http://www.gnu.org/s/gsl/>
-* libxml2 or some other library will probably be needed
+* libxml2
+
+Current to-do list
+------------------
+* Remove dependencies on the GSL library.
+* Work & test singly linked list and tree.
+* Design the mutation tree object.
+* Input/Output format.
