@@ -50,7 +50,7 @@ typedef struct
 
     unsigned int pos; /**< Position of the mutation. */
 
-    mut_info; /**< Details on the mutation. */
+    mut_info mut; /**< Details on the mutation. */
 }
 mutation;
 
