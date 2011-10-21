@@ -6,6 +6,10 @@
 #ifndef SLL_H_
 #define SLL_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include "devries.h"
+
 /**
  * \brief The node of a singly linked list.
  */
@@ -33,7 +37,11 @@ sll;
  * 
  * \param l  The object to initialize.
  */
-void sll_init(sll *l);
+void sll_init(sll *l)
+{
+    sll->head = NULL;
+    sll->tail = NULL;
+}
 
 /**
  * \brief Add a node at the beginning of the list.
@@ -41,7 +49,18 @@ void sll_init(sll *l);
  * \param l      The singly linked list.
  * \param data   The data in the new node.
  */
-void sll_add_head(sll *l, void *data);
+void sll_add_head(sll *l, void *data)
+{
+    sllnode *new_node = (sllnode*)malloc(sizeof(sllnode));
+    new_node->data = data;
+    new_node->next = sll->head;
+    sll->head = new_node;
+    
+    if (sll->tail == NULL)
+    {
+        sll->tail = new_node;
+    }
+}
 
 /**
  * \brief Add a node after the node supplied.
@@ -50,7 +69,22 @@ void sll_add_head(sll *l, void *data);
  * \param node   The node just before the new node. Cannot be a NULL pointer.
  * \param data   The data in the new node.
  */
-void sll_add_after(sll *l, sllnode *node, void *data);
+void sll_add_after(sll *l, sllnode *node, void *data)
+{
+    if (node == NULL)
+    {
+        sll_add_head(l, data);
+    }
+    sllnode *new_node = (sllnode*)malloc(sizeof(sllnode));
+    new_node->data = data;
+    new_node->next = node->next;
+    node->next = new_node;
+    
+    if (new_node->next == NULL)
+    {
+        sll->tail = new_node;
+    }
+}
 
 /**
  * \brief Add a node at the end of the list.
@@ -58,7 +92,22 @@ void sll_add_after(sll *l, sllnode *node, void *data);
  * \param l      The singly linked list.
  * \param data   The data in the new node.
  */
-void sll_add_tail(sll *l, void *data);
+void sll_add_tail(sll *l, void *data)
+{
+    sllnode *new_node = (sllnode*)malloc(sizeof(sllnode));
+    new_node->data = data;
+    new_node->next = NULL;
+    
+    if (sll->head == NULL)
+    {
+        sll->head = new_node;
+    }
+    else
+    {
+        sll->tail->next = new_node;
+    }
+    sll->tail = new_node;
+}
 
 /**
  * \brief Remove the node next to the provided node.
@@ -70,14 +119,52 @@ void sll_add_tail(sll *l, void *data);
  * \param node   The node before the node to be removed.
  * \return       1 (TRUE) is a node has been removed.
  */
-int sll_rm_next(sll *l, sllnode *node);
+int sll_rm_next(sll *l, sllnode *node)
+{
+    sllnode *old_node;
+
+    if (sll->head == NULL)
+    {
+        return FALSE;
+    }
+    if (node == NULL)
+    {
+        old_node = sll->head;
+        sll->head = sll->head->next;
+    }
+    else
+    {
+        if (node->next == NULL)
+        {
+            return FALSE;
+        }
+        old_node = node->next;
+        node->next = node->next->next;
+
+        // Update the 'tail' if necessary:
+        if (node->next == NULL)
+        {
+            sll->tail = node;
+        }
+    }
+    //////////////////////////////////////////
+    // FREE THE MEMORY OF THE OLD NODE !!!  //
+    //////////////////////////////////////////
+    free(old_node);
+
+    return TRUE;
+}
 
 /**
  * \brief Remove all nodes.
  * 
  * \param l    The singly linked list.
  */
-void sll_rm_all(sll *l);
+void sll_rm_all(sll *l)
+{
+    while(sll_rm_next(sll, NULL));
+}
+
 
 /**
  * \brief Remove all nodes satisfying a condition set by a function.
@@ -89,7 +176,27 @@ void sll_rm_all(sll *l);
  * \param foo  The condition to decide if a node can stay or has to be removed.
  * \return     The number of nodes removed.
  */
-unsigned int sll_rm(sll *l, int foo(sllnode *node));
+unsigned int sll_rm(sll *l, int foo(sllnode *node))
+{
+    unsigned int removed = 0;
+
+    sllnode *node = sll->head;
+
+    // rmv first
+
+    while (node != NULL)
+    {
+        if (foo(node->next))
+        {
+            sll_rm_next(sll, node);
+        }
+        else
+        {
+            node = node->next;
+        }
+    }
+    return removed;
+}
 
 /**
  * \brief Return a pointer to the ith node in the list.
@@ -101,7 +208,24 @@ unsigned int sll_rm(sll *l, int foo(sllnode *node));
  * \param i    The index of the node to return
  * \return     A pointer to the ith node.
  */
-sllnode *sll_get(const sll *l, unsigned int i);
+sllnode *sll_get(sll *l, unsigned int i)
+{
+    if (i < 0)
+    {
+        return NULL;
+    }
+    if (i == 0)
+    {
+        return sll->head;
+    }    
+    sllnode *node = sll->head;
+    unsigned int j = 0;
+    for (; j < i; ++j)
+    {
+        node = node->next;
+    }
+    return node;
+}
 
 /**
  * \brief Generates an array from the data inside all the nodes.
@@ -109,7 +233,18 @@ sllnode *sll_get(const sll *l, unsigned int i);
  * \param l    The singly linked list.
  * \return     A pointer to the array or void pointers.
  */
-void **sll_as_array(const sll *l);
+void **sll_as_array(sll *l)
+{
+    void **data = (void**)malloc(sll_length(l) * sizeof(void*));
+
+    int i = 0;
+    sllnode *node = sll->head;
+    for (; node != NULL; node = node->next)
+    {
+        data[i++] = node->data;
+    }
+    return data;
+}
 
 /**
  * \brief Return the length.
@@ -117,7 +252,17 @@ void **sll_as_array(const sll *l);
  * \param l    The singly linked list.
  * \return     Number of nodes in the list.
  */
-unsigned int sll_length(const sll *l);
+unsigned int sll_length(const sll *l)
+{
+    unsigned int length = 0;
+    sllnode *node = sll->head;
+    while (node != NULL)
+    {
+        ++length;
+        node = node->next;
+    }
+    return length;
+}
 
 /**
  * \brief Free the memory of the list.

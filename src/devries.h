@@ -9,12 +9,6 @@
 #define FALSE 0
 #endif
 
-#ifdef DEVRIES_INLINING
-#define DV_INLINE inline
-#else
-#define DV_INLINE
-#endif
-
 #ifndef NULL
 #define NULL 0
 #endif
