@@ -1,16 +1,20 @@
 /*! \file
  *
  * \brief An object to description mutations.
- *
  */ 
 
 #ifndef MUTATION_H_
 #define MUTATION_H_
 
-#include <stdbool.h>
-#include "common.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <string.h>
+#include <libxml/parser.h>
+#include "devries.h"
 #include "tnode.h"
 #include "sll.h"
+#include "seq.h"
 
 // For C++ compilers:
 #ifdef __cplusplus
