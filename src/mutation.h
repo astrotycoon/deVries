@@ -19,8 +19,6 @@ extern "C" {
 
 /**
  * \brief Tyes of mutations.
- *
- * For now, the library only support point mutation.
  */
 typedef enum
 {
@@ -45,8 +43,6 @@ mut_info;
 
 /**
  * \brief A mutation.
- *
- * For now, the library only support point mutation.
  */
 typedef struct
 {
@@ -58,7 +54,9 @@ typedef struct
 }
 mutation;
 
-/** */
+/**
+ * \brief A tree of mutations.
+ */
 typedef struct
 {
     char *seq; /**< Initial sequence. */
