@@ -29,7 +29,20 @@ typedef enum
     Inversion = 2,
     Duplication = 3,
 }
-mutation_type;
+mut_type;
+
+/**
+ * \brief Used by the 'mutation' object to store info on different mutations.
+ */
+typedef union
+{
+    char newc; /**< For point mutations: the new nucleotide. */
+
+    char *insert; /**< For inserts: Array of char to insert. */
+
+    unsigned int ndels; /**< For dels: Number of elements to delete. */
+}
+mut_info;
 
 /**
  * \brief A mutation.
@@ -38,9 +51,11 @@ mutation_type;
  */
 typedef struct
 {
-    mutation_type type; /**< Type of mutation. */
+    mut_type type; /**< Type of mutation. */
 
-    /* */
+    unsigned int pos; /**< Position of the mutation. */
+
+    mut_info; /**< Details on the mutation. */
 }
 mutation;
 
@@ -94,7 +109,7 @@ char *apply_mut(char **seq, mutation *mut);
  */
 void apply_point(char *seq, mutation *mut)
 {
-    seq[mut->pos] = mut->c; // example
+    seq[mut->pos] = mut->newc; // example
 }
 
 /**
