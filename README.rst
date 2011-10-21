@@ -35,6 +35,18 @@ Dependencies
 ------------
 * libxml2
 
+On Linux Debian/Ubuntu you can install libxml2 with:
+
+    sudo apt-get install libxml2 libxml2-dev
+
+To compile a program with libxml2 you need to add, at the end of the command (yes it matters):
+
+    $(xml2-config --libs) $(xml2-config --cflags)
+
+For example a simple program using libxml2 could be compiled with:
+
+    gcc -Wall -O3 -o main main.c $(xml2-config --libs) $(xml2-config --cflags)
+
 Current to-do list
 ------------------
 * Remove dependencies on the GSL library.
