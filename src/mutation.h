@@ -25,9 +25,8 @@ extern "C" {
 typedef enum
 {
     Point = 0,
-    Frameshift = 1,
-    Inversion = 2,
-    Duplication = 3,
+    Inserts = 1,
+    Delete = 2,
 }
 mut_type;
 
