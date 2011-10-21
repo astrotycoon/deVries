@@ -13,7 +13,6 @@
 #include <string.h>
 #include <libxml/parser.h>
 #include "devries.h"
-#include "gcode.h"
 
 // For C++ compilers:
 #ifdef __cplusplus
@@ -578,25 +577,26 @@ char* transcription(const char* dna_seq)
 char *translation(const char *rna_seq)
 {
     //assert(rna_pure_seq(rna_seq);
-    const int n_amino = strlen(rna_seq) / 3;
+    const unsigned int n_amino = strlen(rna_seq) / 3;
     char* amino_seq = (char*)malloc(n_amino + 1);
 
-    int i = 0, a = 0;
+    unsigned int i = 0, a = 0;
     while (a < n_amino)
+    #ifdef CUSTOMCODE
     {
         if (rna_seq[i] == 'U')
         {
-            if (rna_seq[i+1] == 'U')
+            if (rna_seq[i + 1] == 'U')
             {
-                if (rna_seq[i+2] == 'U')
+                if (rna_seq[i + 2] == 'U')
                 {
                     amino_seq[a] = GCODE_UUU;
                 }
-                else if (rna_seq[i+2] == 'G')
+                else if (rna_seq[i + 2] == 'G')
                 {
                     amino_seq[a] = GCODE_UUG;
                 }
-                else if (rna_seq[i+2] == 'C')
+                else if (rna_seq[i + 2] == 'C')
                 {
                     amino_seq[a] = GCODE_UUC;
                 }
@@ -605,17 +605,17 @@ char *translation(const char *rna_seq)
                     amino_seq[a] = GCODE_UUA;
                 }
             }
-            else if (rna_seq[i+1] == 'G')
+            else if (rna_seq[i + 1] == 'G')
             {
-                if (rna_seq[i+2] == 'U')
+                if (rna_seq[i + 2] == 'U')
                 {
                     amino_seq[a] = GCODE_UGU;
                 }
-                else if (rna_seq[i+2] == 'G')
+                else if (rna_seq[i + 2] == 'G')
                 {
                     amino_seq[a] = GCODE_UGG;
                 }
-                else if (rna_seq[i+2] == 'C')
+                else if (rna_seq[i + 2] == 'C')
                 {
                     amino_seq[a] = GCODE_UGC;
                 }
@@ -624,17 +624,17 @@ char *translation(const char *rna_seq)
                     amino_seq[a] = GCODE_UGA;
                 }
             }
-            else if (rna_seq[i+1] == 'C')
+            else if (rna_seq[i + 1] == 'C')
             {
-                if (rna_seq[i+2] == 'U')
+                if (rna_seq[i + 2] == 'U')
                 {
                     amino_seq[a] = GCODE_UCU;
                 }
-                else if (rna_seq[i+2] == 'G')
+                else if (rna_seq[i + 2] == 'G')
                 {
                     amino_seq[a] = GCODE_UCG;
                 }
-                else if (rna_seq[i+2] == 'C')
+                else if (rna_seq[i + 2] == 'C')
                 {
                     amino_seq[a] = GCODE_UCC;
                 }
@@ -645,15 +645,15 @@ char *translation(const char *rna_seq)
             }
             else
             {
-                if (rna_seq[i+2] == 'U')
+                if (rna_seq[i + 2] == 'U')
                 {
                     amino_seq[a] = GCODE_UAU;
                 }
-                else if (rna_seq[i+2] == 'G')
+                else if (rna_seq[i + 2] == 'G')
                 {
                     amino_seq[a] = GCODE_UAG;
                 }
-                else if (rna_seq[i+2] == 'C')
+                else if (rna_seq[i + 2] == 'C')
                 {
                     amino_seq[a] = GCODE_UAC;
                 }
@@ -665,17 +665,17 @@ char *translation(const char *rna_seq)
         }
         else if (rna_seq[i] == 'G')
         {
-            if (rna_seq[i+1] == 'U')
+            if (rna_seq[i + 1] == 'U')
             {
-                if (rna_seq[i+2] == 'U')
+                if (rna_seq[i + 2] == 'U')
                 {
                     amino_seq[a] = GCODE_GUU;
                 }
-                else if (rna_seq[i+2] == 'G')
+                else if (rna_seq[i + 2] == 'G')
                 {
                     amino_seq[a] = GCODE_GUG;
                 }
-                else if (rna_seq[i+2] == 'C')
+                else if (rna_seq[i + 2] == 'C')
                 {
                     amino_seq[a] = GCODE_GUC;
                 }
@@ -684,17 +684,17 @@ char *translation(const char *rna_seq)
                     amino_seq[a] = GCODE_GUA;
                 }
             }
-            else if (rna_seq[i+1] == 'G')
+            else if (rna_seq[i + 1] == 'G')
             {
-                if (rna_seq[i+2] == 'U')
+                if (rna_seq[i + 2] == 'U')
                 {
                     amino_seq[a] = GCODE_GGU;
                 }
-                else if (rna_seq[i+2] == 'G')
+                else if (rna_seq[i + 2] == 'G')
                 {
                     amino_seq[a] = GCODE_GGG;
                 }
-                else if (rna_seq[i+2] == 'C')
+                else if (rna_seq[i + 2] == 'C')
                 {
                     amino_seq[a] = GCODE_GGC;
                 }
@@ -703,17 +703,17 @@ char *translation(const char *rna_seq)
                     amino_seq[a] = GCODE_GGA;
                 }
             }
-            else if (rna_seq[i+1] == 'C')
+            else if (rna_seq[i + 1] == 'C')
             {
-                if (rna_seq[i+2] == 'U')
+                if (rna_seq[i + 2] == 'U')
                 {
                     amino_seq[a] = GCODE_GCU;
                 }
-                else if (rna_seq[i+2] == 'G')
+                else if (rna_seq[i + 2] == 'G')
                 {
                     amino_seq[a] = GCODE_GCG;
                 }
-                else if (rna_seq[i+2] == 'C')
+                else if (rna_seq[i + 2] == 'C')
                 {
                     amino_seq[a] = GCODE_GCC;
                 }
@@ -724,15 +724,15 @@ char *translation(const char *rna_seq)
             }
             else
             {
-                if (rna_seq[i+2] == 'U')
+                if (rna_seq[i + 2] == 'U')
                 {
                     amino_seq[a] = GCODE_GAU;
                 }
-                else if (rna_seq[i+2] == 'G')
+                else if (rna_seq[i + 2] == 'G')
                 {
                     amino_seq[a] = GCODE_GAG;
                 }
-                else if (rna_seq[i+2] == 'C')
+                else if (rna_seq[i + 2] == 'C')
                 {
                     amino_seq[a] = GCODE_GAC;
                 }
@@ -744,17 +744,17 @@ char *translation(const char *rna_seq)
         }
         else if (rna_seq[i] == 'C')
         {
-            if (rna_seq[i+1] == 'U')
+            if (rna_seq[i + 1] == 'U')
             {
-                if (rna_seq[i+2] == 'U')
+                if (rna_seq[i + 2] == 'U')
                 {
                     amino_seq[a] = GCODE_CUU;
                 }
-                else if (rna_seq[i+2] == 'G')
+                else if (rna_seq[i + 2] == 'G')
                 {
                     amino_seq[a] = GCODE_CUG;
                 }
-                else if (rna_seq[i+2] == 'C')
+                else if (rna_seq[i + 2] == 'C')
                 {
                     amino_seq[a] = GCODE_CUC;
                 }
@@ -763,17 +763,17 @@ char *translation(const char *rna_seq)
                     amino_seq[a] = GCODE_CUA;
                 }
             }
-            else if (rna_seq[i+1] == 'G')
+            else if (rna_seq[i + 1] == 'G')
             {
-                if (rna_seq[i+2] == 'U')
+                if (rna_seq[i + 2] == 'U')
                 {
                     amino_seq[a] = GCODE_CGU;
                 }
-                else if (rna_seq[i+2] == 'G')
+                else if (rna_seq[i + 2] == 'G')
                 {
                     amino_seq[a] = GCODE_CGG;
                 }
-                else if (rna_seq[i+2] == 'C')
+                else if (rna_seq[i + 2] == 'C')
                 {
                     amino_seq[a] = GCODE_CGC;
                 }
@@ -782,17 +782,17 @@ char *translation(const char *rna_seq)
                     amino_seq[a] = GCODE_CGA;
                 }
             }
-            else if (rna_seq[i+1] == 'C')
+            else if (rna_seq[i + 1] == 'C')
             {
-                if (rna_seq[i+2] == 'U')
+                if (rna_seq[i + 2] == 'U')
                 {
                     amino_seq[a] = GCODE_CCU;
                 }
-                else if (rna_seq[i+2] == 'G')
+                else if (rna_seq[i + 2] == 'G')
                 {
                     amino_seq[a] = GCODE_CCG;
                 }
-                else if (rna_seq[i+2] == 'C')
+                else if (rna_seq[i + 2] == 'C')
                 {
                     amino_seq[a] = GCODE_CCC;
                 }
@@ -900,87 +900,147 @@ char *translation(const char *rna_seq)
                 }
             }
         }
-        i += 3;
-        ++a;
-    }
-
-    /*
-    // Slightly faster function than the above, but less flexible
-    int i = 0, a = 0;
-    while (a < N_AMINO) {
-    if (rna_seq[i] == 'U') {                         // U..
-        if (rna_seq[i+1] == 'U') {                     // UU.
-            if (rna_seq[i+2] == 'U' || rna_seq[i+2] == 'C')
-                amino_seq[a] = 'F';                       // UUU, UUC -> Phenylalanine
+        #else
+        if (rna_seq[i] == 'U')
+        {
+            if (rna_seq[i + 1] == 'U')
+            {
+                if (rna_seq[i + 2] == 'U' || rna_seq[i + 2] == 'C')
+                {
+                    amino_seq[a] = 'F';
+                }
+                else
+                {
+                    amino_seq[a] = 'L';
+                }
+            }
+            else if (rna_seq[i + 1] == 'C')
+            {
+                amino_seq[a] = 'S';
+            }
+            else if (rna_seq[i + 1] == 'A')
+            {
+                if (rna_seq[i + 2] == 'U' || rna_seq[i + 2] == 'C')
+                {
+                    amino_seq[a] = 'Y';
+                }
+                else
+                {
+                    amino_seq[a] = 'Z';
+                }
+            }
             else
-                    amino_seq[a] = 'L';                     // UUA, UUG -> Leucine
-            } else if (rna_seq[i+1] == 'C') {            // UC.
-                    amino_seq[a] = 'S';                     // UCA, UCG, UCC, UCU -> Serine
-            } else if (rna_seq[i+1] == 'A') {            // UA.
-                if (rna_seq[i+2] == 'U' || rna_seq[i+2] == 'C')
-                    amino_seq[a] = 'Y';                     // UAU, UAC -> Tyrosine
+            {
+                if (rna_seq[i + 2] == 'U' || rna_seq[i + 2] == 'C')
+                {
+                    amino_seq[a] = 'C';
+                }
+                else if (rna_seq[i + 2] == 'A')
+                {
+                    amino_seq[a] = 'Z';
+                }
                 else
-                    amino_seq[a] = 'Z';                     // UAA, UAG -> STOP
-            } else {                                    // UG.
-                if (rna_seq[i+2] == 'U' || rna_seq[i+2] == 'C')
-                    amino_seq[a] = 'C';                     // UGU, UGC -> Cysteine
-                else if (rna_seq[i+2] == 'A')
-                    amino_seq[a] = 'Z';                     // UGA -> STOP
-                else
-                    amino_seq[a] = 'W';                     // UGG -> Tryptophan
-            }
-        } else if (rna_seq[i] == 'C') {                // C..
-            if (rna_seq[i+1] == 'U') {                   // CU.
-                amino_seq[a] = 'L';                       // CUA, CUG, CUU, CUC -> Leucine
-            } else if (rna_seq[i+1] == 'C') {            // CC.
-                amino_seq[a] = 'P';                       // CCA, CCG, CCC, CCU -> Proline
-            } else if (rna_seq[i+1] == 'A') {            // CA.
-                if (rna_seq[i+2] == 'U' || rna_seq[i+2] == 'C')
-                    amino_seq[a] = 'H';                     // CAU, CAC -> Histidine
-                else
-                    amino_seq[a] = 'Q';                     // CAA, CAG -> Glutamine
-            } else {                                    // CG.
-                amino_seq[a] = 'R';                       // CGA, CGG, CGC, CGU -> Arginine
-            }
-        } else if (rna_seq[i] == 'A') {                // A..
-            if (rna_seq[i+1] == 'U') {                   // AU.
-                if (rna_seq[i+2] == 'G')                       
-                    amino_seq[a] = 'M';                     // AUG -> Start codon/Methionine
-                else
-                    amino_seq[a] = 'I';                     // AUC, AUU, AUA -> Isoleucine
-            } else if (rna_seq[i+1] == 'C') {            // AC
-                amino_seq[a] = 'T';                       // ACA, ACG, ACC, ACU -> Threonine
-            } else if (rna_seq[i+1] == 'A') {            // AA.
-                if (rna_seq[i+2] == 'U' || rna_seq[i+2] == 'C')
-                    amino_seq[a] = 'N';                     // AAU, AAC -> Asparagine
-                else
-                    amino_seq[a] = 'K';                     // AAA, AAG -> Lysine
-            } else {                                    // AG.
-                if (rna_seq[i+2] == 'U' || rna_seq[i+2] == 'C')
-                    amino_seq[a] = 'S';                     // AGU, AGC -> Serine
-                else
-                    amino_seq[a] = 'R';                     // AGA, AGG -> Arginine
-            }
-        } else {                                      // G..
-            if (rna_seq[i+1] == 'U') {                   // GU.
-                amino_seq[a] = 'V';                       // GUA, GUU, GUC, GUG -> Valine
-            } else if (rna_seq[i+1] == 'C') {            // GC
-                amino_seq[a] = 'A';                       // GCA, GCU, GCC, GCG -> Alanine
-            } else if (rna_seq[i+1] == 'A') {            // GA.
-                if (rna_seq[i+2] == 'U' || rna_seq[i+2] == 'C')
-                    amino_seq[a] = 'D';                     // GAU, GAC -> Aspartic acid
-                else
-                    amino_seq[a] = 'E';                     // GAA, GAG -> Glutamic acid
-            } else {                                    // GG.
-                amino_seq[a] = 'G';                       // GGA, GGU, GGG, GGC -> Glycine
+                {
+                    amino_seq[a] = 'W';
+                }
             }
         }
-
+        else if (rna_seq[i] == 'C')
+        {
+            if (rna_seq[i + 1] == 'U')
+            {
+                amino_seq[a] = 'L';
+            }
+            else if (rna_seq[i + 1] == 'C')
+            {
+                amino_seq[a] = 'P';
+            }
+            else if (rna_seq[i + 1] == 'A')
+            {
+                if (rna_seq[i + 2] == 'U' || rna_seq[i + 2] == 'C')
+                {
+                    amino_seq[a] = 'H';
+                }
+                else
+                {
+                    amino_seq[a] = 'Q';
+                }
+            }
+            else
+            {
+                amino_seq[a] = 'R';
+            }
+        }
+        else if (rna_seq[i] == 'A')
+        {
+            if (rna_seq[i + 1] == 'U')
+            {
+                if (rna_seq[i + 2] == 'G')
+                {
+                    amino_seq[a] = 'M';
+                }
+                else
+                {
+                    amino_seq[a] = 'I';
+                }
+            }
+            else if (rna_seq[i + 1] == 'C')
+            {
+                amino_seq[a] = 'T';
+            }
+            else if (rna_seq[i + 1] == 'A')
+            {
+                if (rna_seq[i + 2] == 'U' || rna_seq[i + 2] == 'C')
+                {
+                    amino_seq[a] = 'N';
+                }
+                else
+                {
+                    amino_seq[a] = 'K';
+                }
+            }
+            else
+            {
+                if (rna_seq[i + 2] == 'U' || rna_seq[i + 2] == 'C')
+                {
+                    amino_seq[a] = 'S';
+                }
+                else
+                {
+                    amino_seq[a] = 'R';
+                }
+            }
+        }
+        else
+        {
+            if (rna_seq[i + 1] == 'U')
+            {
+                amino_seq[a] = 'V';
+            }
+            else if (rna_seq[i + 1] == 'C')
+            {
+                amino_seq[a] = 'A';
+            }
+            else if (rna_seq[i + 1] == 'A')
+            {
+                if (rna_seq[i + 2] == 'U' || rna_seq[i + 2] == 'C')
+                {
+                    amino_seq[a] = 'D';
+                }
+                else
+                {
+                    amino_seq[a] = 'E';
+                }
+            }
+            else
+            {
+                amino_seq[a] = 'G';
+            }
+        }
+        #endif
         i += 3;
         ++a;
     }
-    */
-
     amino_seq[n_amino] = '\0';
     return amino_seq;
 }

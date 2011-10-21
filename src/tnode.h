@@ -7,6 +7,10 @@
 #ifndef TNODE_H_
 #define TNODE_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <string.h>
 #include "devries.h"
 #include "sll.h"
 
