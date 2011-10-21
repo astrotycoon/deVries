@@ -167,7 +167,6 @@ void sll_rm_all(sll *l)
     while(sll_rm_next(sll, NULL));
 }
 
-
 /**
  * \brief Remove all nodes satisfying a condition set by a function.
  *
