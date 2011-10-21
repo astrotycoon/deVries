@@ -1,7 +1,7 @@
 Up to v.1.0
 -----------
 Linux x86_64:
-    gcc/g++ 4.6.1, 4.5.3, 4.4.6
-    icc/icpc 11.1
-    pathscale xx.x
+    gcc/g++ 4.6, 4.5, 4.4
+    icc/icpc 11
+    pathscale xx
     clang 2.8

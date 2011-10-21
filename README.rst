@@ -29,7 +29,7 @@ mutation profiles and mutation trees in a XML format.
 
 License
 -------
-GPLv2+ <http://www.opensource.org/licenses/gpl-2.0.php>.
+MIT <http://www.opensource.org/licenses/mit-license.php>.
 
 Dependencies
 ------------
