@@ -92,7 +92,10 @@ char *apply_mut(char **seq, mutation *mut);
  * \param mut     Mutation object.
  * \return        A pointer to the sequence (will only change if memory has been reallocated).
  */
-void apply_point(char *seq, mutation *mut);
+void apply_point(char *seq, mutation *mut)
+{
+    seq[mut->pos] = mut->c; // example
+}
 
 /**
  * \brief Apply an insert mutation.
