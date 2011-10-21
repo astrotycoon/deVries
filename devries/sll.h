@@ -12,6 +12,12 @@
 #include <string.h>
 #include "devries.h"
 
+/* For C++ compilers: */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /**
  * \brief The node of a singly linked list.
  */
@@ -43,6 +49,35 @@ void sll_init(sll *l)
 {
     sll->head = NULL;
     sll->tail = NULL;
+}
+
+/**
+ * \brief Return a pointer to the ith node in the list.
+ *
+ * This function will either return a pointer to the nth node in the list
+ * or a NULL pointer if i is out of range.
+ * 
+ * \param l    The singly linked list.
+ * \param i    The index of the node to return
+ * \return     A pointer to the ith node.
+ */
+sllnode *sll_get(sll *l, unsigned int i)
+{
+    if (i < 0)
+    {
+        return NULL;
+    }
+    if (i == 0)
+    {
+        return sll->head;
+    }    
+    sllnode *node = sll->head;
+    unsigned int j = 0;
+    for (; j < i; ++j)
+    {
+        node = node->next;
+    }
+    return node;
 }
 
 /**
@@ -86,6 +121,18 @@ void sll_add_after(sll *l, sllnode *node, void *data)
     {
         sll->tail = new_node;
     }
+}
+
+/**
+ * \brief Add a node after the ith node.
+ * 
+ * \param l      The singly linked list.
+ * \param i      ID of the node before the new node.
+ * \param data   The data in the new node.
+ */
+void sll_add_after_n(sll *l, unsigned int i, void *data)
+{
+    sll_add_after(l, sll_get(l, i), data);
 }
 
 /**
@@ -143,15 +190,12 @@ int sll_rm_next(sll *l, sllnode *node)
         old_node = node->next;
         node->next = node->next->next;
 
-        // Update the 'tail' if necessary:
+        /* Update the 'tail' if necessary: */
         if (node->next == NULL)
         {
             sll->tail = node;
         }
     }
-    //////////////////////////////////////////
-    // FREE THE MEMORY OF THE OLD NODE !!!  //
-    //////////////////////////////////////////
     free(old_node);
 
     return TRUE;
@@ -183,7 +227,7 @@ unsigned int sll_rm(sll *l, int foo(sllnode *node))
 
     sllnode *node = sll->head;
 
-    // rmv first
+    /* rmv first */
 
     while (node != NULL)
     {
@@ -197,35 +241,6 @@ unsigned int sll_rm(sll *l, int foo(sllnode *node))
         }
     }
     return removed;
-}
-
-/**
- * \brief Return a pointer to the ith node in the list.
- *
- * This function will either return a pointer to the nth node in the list
- * or a NULL pointer if i is out of range.
- * 
- * \param l    The singly linked list.
- * \param i    The index of the node to return
- * \return     A pointer to the ith node.
- */
-sllnode *sll_get(sll *l, unsigned int i)
-{
-    if (i < 0)
-    {
-        return NULL;
-    }
-    if (i == 0)
-    {
-        return sll->head;
-    }    
-    sllnode *node = sll->head;
-    unsigned int j = 0;
-    for (; j < i; ++j)
-    {
-        node = node->next;
-    }
-    return node;
 }
 
 /**

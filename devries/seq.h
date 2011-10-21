@@ -14,9 +14,10 @@
 #include <libxml/parser.h>
 #include "devries.h"
 
-// For C++ compilers:
+/* For C++ compilers: */
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /**
@@ -73,11 +74,11 @@ void read_fasta(const char *filename, unsigned int n, sequence *seq)
 {
     FILE* input = fopen(filename, "r");
 
-    fseek(input, 0, SEEK_END); // seek to end of file
-    const long file_size = ftell(input); // get the size of the file
-    fseek(input, 0, SEEK_SET); // seek back to beginning of file
+    fseek(input, 0, SEEK_END); /* seek to end of file */
+    const long file_size = ftell(input); /* get the size of the file */
+    fseek(input, 0, SEEK_SET); /* seek back to beginning of file */
 
-    // Read the entire file
+    /* Read the entire file */
     char *complete_file = (char*)malloc(file_size);
     size_t fread_size = fread((void*)complete_file, sizeof(char), file_size, input);
     const unsigned int complete_file_size = strlen(complete_file);
@@ -98,7 +99,7 @@ void read_fasta(const char *filename, unsigned int n, sequence *seq)
             fasta->seq = (char*)malloc(complete_file_size);
             int j = 0;
 
-            //printf("%d\n", i);
+            /* printf("%d\n", i); */
 
             while (i < complete_file_size)
             {
@@ -511,7 +512,7 @@ char *rna_rmv_amb(char *rna_seq)
  */
 char *dna_antisense(const char *dna_seq)
 {
-    //assert(dna_pure_seq(char *dna_seq));
+    assert(dna_pure_seq(char *dna_seq));
     const int seq_len = strlen(dna_seq);
     char *dna_antisense = (char*)malloc(seq_len + 1);
 
@@ -549,7 +550,7 @@ char *dna_antisense(const char *dna_seq)
  */
 char* transcription(const char* dna_seq)
 {
-    //assert(dna_pure_seq(const char *dna_seq));
+    assert(dna_pure_seq(const char *dna_seq));
     const int seq_len = strlen(dna_seq);
     char* rna_seq = (char*)malloc(seq_len + 1);
 
@@ -576,7 +577,7 @@ char* transcription(const char* dna_seq)
  */
 char *translation(const char *rna_seq)
 {
-    //assert(rna_pure_seq(rna_seq);
+    assert(rna_pure_seq(rna_seq);
     const unsigned int n_amino = strlen(rna_seq) / 3;
     char* amino_seq = (char*)malloc(n_amino + 1);
 

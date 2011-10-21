@@ -10,7 +10,7 @@ term 'Mutation' (from the latin muto, 'to change').
 
 Author
 ------
-Philippe Desjardins-Proulx (phdp.huginn.info) <philippe.d.proulx@gmail.com>
+* Philippe Desjardins-Proulx <philippe.d.proulx@gmail.com>
 
 Language
 --------

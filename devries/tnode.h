@@ -14,9 +14,10 @@
 #include "devries.h"
 #include "sll.h"
 
-// For C++ compilers:
+/* For C++ compilers: */
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /**

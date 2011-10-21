@@ -16,9 +16,10 @@
 #include "sll.h"
 #include "seq.h"
 
-// For C++ compilers:
+/* For C++ compilers: */
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /**
@@ -99,7 +100,7 @@ sll *list_mutations(tnode *node);
  * \param mut     Mutation object.
  * \return        A pointer to the sequence (will only change if memory has been reallocated).
  */
-char *apply_mut(char **seq, mutation *mut);
+char *apply_mut(char **seq, mutation *m);
 
 /**
  * \brief Apply a point mutation to a sequence.
@@ -108,9 +109,9 @@ char *apply_mut(char **seq, mutation *mut);
  * \param mut     Mutation object.
  * \return        A pointer to the sequence (will only change if memory has been reallocated).
  */
-void apply_point(char *seq, mutation *mut)
+void apply_point(char *seq, mutation *m);
 {
-    seq[mut->pos] = mut->newc; // example
+    seq[mut->pos] = mut->newc;
 }
 
 /**
@@ -122,7 +123,7 @@ void apply_point(char *seq, mutation *mut)
  * \param mut     Mutation object.
  * \return        A pointer to the new sequence.
  */
-char *apply_insert(char **seq, mutation *mut);
+char *apply_insert(char **seq, mutation *m);
 
 /**
  * \brief Apply a del mutation.
@@ -133,7 +134,7 @@ char *apply_insert(char **seq, mutation *mut);
  * \param mut     Mutation object.
  * \return        A pointer to the sequence.
  */
-char *apply_del(char **seq, mutation *mut);
+char *apply_del(char **seq, mutation *m);
 
 /**
  * \brief Apply a del mutation.
@@ -144,7 +145,49 @@ char *apply_del(char **seq, mutation *mut);
  * \param mut     Mutation object.
  * \return        A pointer to the sequence.
  */
-char *apply_del_realloc(char **seq, mutation *mut);
+char *apply_del_realloc(char **seq, mutation *m);
+
+/**
+ * \brief Return a mutated sequence without modifying the original.
+ * 
+ * \param seq     A pointer to the sequence.
+ * \param mut     Mutation object.
+ * \return        A new sequence.
+ */
+char* get_mut(const char *seq, mutation *m)
+{
+    unsigned int length0 = len(seq);
+    unsigned int length1 = length0;
+    if (m->type == Inserts)
+    {
+        length1 += strlen(m->mut.insert);
+    }
+    else if (m->type = Delete)
+    {
+        length1 -= m->mut.ndels;
+    }
+    char *seq1 = (char*)malloc(length1 + 1);
+
+    if (m->type == Point)
+    {
+        memcpy(seq1, seq, length);
+        seq1[mut->pos] = mut->newc;
+    }
+    if (m->type == Inserts)
+    {
+        const unsigned int insert_length = strlen(m->mut.insert);
+        memcpy(seq1, seq, m->pos);
+        memcpy(seq1 + m->pos, m->mut.insert, insert_length);
+        memcpy(seq1 + m->pos + insert_length, seq, length - m->pos);
+    }
+    else /* Delete. */
+    {
+        memcpy(seq1, seq, m->pos);
+        memcpy(seq1 + m->pos, seq, length - m->pos);
+    }
+    seq1[length1] = '\0';
+    return seq1;
+}
 
 #ifdef __cplusplus
 }
