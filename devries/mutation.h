@@ -28,8 +28,8 @@ extern "C"
 typedef enum
 {
     Point = 0,
-    Inserts = 1,
-    Delete = 2,
+    Insertions = 1,
+    Deletions = 2,
 }
 mut_type;
 
@@ -40,9 +40,9 @@ typedef union
 {
     char newc; /**< For point mutations: the new nucleotide. */
 
-    char *insert; /**< For inserts: Array of char to insert. */
+    char *insert; /**< For insertions: the string to insert. */
 
-    unsigned int ndels; /**< For dels: Number of elements to delete. */
+    unsigned int ndels; /**< For dels: number of elements to delete. */
 }
 mut_info;
 
@@ -158,11 +158,11 @@ char* get_mut(const char *seq, mutation *m)
 {
     unsigned int length0 = len(seq);
     unsigned int length1 = length0;
-    if (m->type == Inserts)
+    if (m->type == Insertions)
     {
         length1 += strlen(m->mut.insert);
     }
-    else if (m->type = Delete)
+    else if (m->type = Deletions)
     {
         length1 -= m->mut.ndels;
     }

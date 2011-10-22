@@ -37,18 +37,27 @@ typedef struct
     sllnode *head; /**< First element of the list. */
 
     sllnode *tail; /**< Last element of the list. */
+
+    void (*destroy)(void *data); /**< Function to free the memory of the data inside the nodes. */
 }
 sll;
 
 /**
  * \brief Initialize a singly linked list object.
+ *
+ * The 'destroy' function supplied must either be the standard library's free
+ * if the data was allocated with malloc (e.g.: an array of int), a custom
+ * function by the user to free more complex structures, or simply NULL if you
+ * don't want the list to free the memory of the data.
  * 
- * \param l  The object to initialize.
+ * \param l          The object to initialize.
+ * \param destroy    Pointer to a function to free the memory of the data.
  */
-void sll_init(sll *l)
+void sll_init(sll *l, void (*destroy)(void *data))
 {
     sll->head = NULL;
     sll->tail = NULL;
+    sll->destroy = destroy;
 }
 
 /**
@@ -194,6 +203,7 @@ int sll_rm_next(sll *l, sllnode *node)
             sll->tail = node;
         }
     }
+    l->destroy(old_node->data);
     free(old_node);
 
     return TRUE;
@@ -223,15 +233,18 @@ unsigned int sll_rm(sll *l, int foo(sllnode *node))
 {
     unsigned int removed = 0;
 
+    while (foo(l->head))
+    {
+        sll_rm_next(sll, NULL);
+        ++removed;
+    }
     sllnode *node = sll->head;
-
-    /* rmv first */
-
-    while (node != NULL)
+    while (node->next != NULL)
     {
         if (foo(node->next))
         {
             sll_rm_next(sll, node);
+            ++removed;
         }
         else
         {
