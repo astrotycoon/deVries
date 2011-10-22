@@ -53,7 +53,7 @@ tnode *tnode_init(tnode *p, char *name, void *data)
     t->p = p;
     t->l = NULL;
     t->r = NULL;
-    t->data = NULL;
+    t->data = data;
 
     return t;
 }
@@ -67,7 +67,7 @@ tnode *tnode_init(tnode *p, char *name, void *data)
 void tnode_add_children(tnode *t, tnode *child)
 {
     ++(t->n);
-    sll_add_tail((t)->children,(void*)(child))
+    sll_add_tail(t->children, (void*)(child))
 }
 
 /**
@@ -144,7 +144,7 @@ int tnode_internal(tnode *t)
 }
 #else
 #ifndef NDEBUG
-#define tnode_leaf(t)       ((t)->children->length==0)
+#define tnode_leaf(t)       ((t)->n==0)
 #define tnode_root(t)       ((t)->p==NULL)
 #define tnode_internal(t)   (((t)->children->length>0)&&t->p!=NULL)
 #endif

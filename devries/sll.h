@@ -66,11 +66,7 @@ sllnode *sll_get(sll *l, unsigned int i)
     if (i < 0)
     {
         return NULL;
-    }
-    if (i == 0)
-    {
-        return sll->head;
-    }    
+    } 
     sllnode *node = sll->head;
     unsigned int j = 0;
     for (; j < i; ++j)
@@ -101,6 +97,9 @@ void sll_add_head(sll *l, void *data)
 
 /**
  * \brief Add a node after the node supplied.
+ *
+ * This function is *very* unsafe, as there is no guarantee the node is even
+ * in the list. Use the much safer sll_add_after_n function whenever possible.
  * 
  * \param l      The singly linked list.
  * \param node   The node just before the new node. Cannot be a NULL pointer.
@@ -190,7 +189,6 @@ int sll_rm_next(sll *l, sllnode *node)
         old_node = node->next;
         node->next = node->next->next;
 
-        /* Update the 'tail' if necessary: */
         if (node->next == NULL)
         {
             sll->tail = node;
