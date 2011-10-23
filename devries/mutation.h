@@ -23,7 +23,7 @@ extern "C"
 #endif
 
 /**
- * \brief Tyes of mutations.
+ * \brief Tyes of mutations support by deVries (i.e.: all small-scale mutations).
  */
 typedef enum
 {

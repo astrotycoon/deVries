@@ -1,7 +1,6 @@
 /*! \file
  *
- * \brief A generic strictly binary tree.
- *
+ * \brief A generic tree.
  */ 
 
 #ifndef TNODE_H_
@@ -25,17 +24,27 @@ extern "C"
  */
 typedef struct tnode_
 {
-    char *name; /**< Name of the node. */
+    char *name; /**< Name of the (sub)tree. */
 
     struct tnode_ *p; /**< Pointer to the parent. */
 
     unsigned int n; /**< Number of children. */
     
-    sll *children; /**< Singly linked list of children. */
+    sll children; /**< Singly linked list of children. */
 
     void *data; /**< Data inside the node. */
 }
 tnode;
+
+/**
+ * \brief Recursively free the memory of the node.
+ *
+ * The tree node doesn't own the data at the end of the void pointer so the user
+ * has to free this memory manually (or reimplement this function).
+ * 
+ * \param t    The root of the tree to free.
+ */
+void tnode_free(tnode *t); /* Add a void function for genericity. */
 
 /**
  * \brief Initialize a tree object.
@@ -54,6 +63,7 @@ tnode *tnode_init(tnode *p, char *name, void *data)
     t->l = NULL;
     t->r = NULL;
     t->data = data;
+    t->children.destroy = NULL; /* For now... Mwhahaha! */
 
     return t;
 }
@@ -191,16 +201,6 @@ char *tnode_newick(tnode *t)
     */
     return str;
 }
-
-/**
- * \brief Recursively free the memory of the node.
- *
- * The tree node doesn't own the data at the end of the void pointer so the user
- * has to free this memory manually (or reimplement this function).
- * 
- * \param t    The root of the tree to free.
- */
-void tnode_free(tnode *t); /* Add a void function for genericity. */
 
 #ifdef __cplusplus
 }
