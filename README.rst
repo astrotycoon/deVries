@@ -14,7 +14,7 @@ Author
 
 Language
 --------
-ANSI C. See TESTS for a list of compiler tested.
+C++-compatible ANSI C. See TESTS for a list of compiler tested.
 
 Design
 ------

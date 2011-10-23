@@ -13,6 +13,7 @@
 #include <string.h>
 #include <libxml/parser.h>
 #include "devries.h"
+#include "well1024.h"
 
 /* For C++ compilers: */
 #ifdef __cplusplus
@@ -21,17 +22,14 @@ extern "C"
 #endif
 
 /**
- * \brief Type of sequences.
+ * \brief Return true if the char is a standard DNA nucleotide.
  */
-typedef enum
-{
-    Protein = 0,
-    RNA = 1,
-    DNA = 2,
-    DNAorRNA = 3,
-    Other = 4,
-}
-sequence_type;
+#define DNANUC(c) (c=='A'||c=='T'||c=='G'||c=='C')
+
+/**
+ * \brief Return true if the char is a standard RNA nucleotide.
+ */
+#define RNANUC(c) (c=='A'||c=='U'||c=='G'||c=='C')
 
 /**
  * \brief A simple object to store FASTA sequences.
@@ -43,8 +41,6 @@ typedef struct
     char *seq_info; /**< The 'info' on the sequence. */
 
     unsigned int length; /**< Length of the sequence. */
-
-    sequence_type type; /**< Type of sequence. */
 }
 sequence;
 
@@ -72,13 +68,13 @@ cseq;
  */
 void read_fasta(const char *filename, unsigned int n, sequence *seq)
 {
+    /*
     FILE* input = fopen(filename, "r");
 
-    fseek(input, 0, SEEK_END); /* seek to end of file */
-    const long file_size = ftell(input); /* get the size of the file */
-    fseek(input, 0, SEEK_SET); /* seek back to beginning of file */
+    fseek(input, 0, SEEK_END);
+    const long file_size = ftell(input);
+    fseek(input, 0, SEEK_SET);
 
-    /* Read the entire file */
     char *complete_file = (char*)malloc(file_size);
     size_t fread_size = fread((void*)complete_file, sizeof(char), file_size, input);
     const unsigned int complete_file_size = strlen(complete_file);
@@ -99,8 +95,6 @@ void read_fasta(const char *filename, unsigned int n, sequence *seq)
             fasta->seq = (char*)malloc(complete_file_size);
             int j = 0;
 
-            /* printf("%d\n", i); */
-
             while (i < complete_file_size)
             {
                 if (complete_file[i] != '\n' && complete_file[i] != '\r')
@@ -116,6 +110,7 @@ void read_fasta(const char *filename, unsigned int n, sequence *seq)
     }
     fasta->type = get_type(fasta->seq);
     fclose(fp);
+    */
 }
 
 /**
@@ -129,6 +124,7 @@ void read_fasta(const char *filename, unsigned int n, sequence *seq)
  */
 void read_sequenceml(const char *filename, unsigned int n, sequence *seq)
 {
+    /*
     xmlDoc *document;
     xmlNode *root, *first_child, *node;
     char *filename;
@@ -150,6 +146,7 @@ void read_sequenceml(const char *filename, unsigned int n, sequence *seq)
         fprintf(stdout, "\t Child is <%s> (%i)\n", node->name, node->type);
     }
     fprintf(stdout, "...\n");
+    */
 }
 
 /**
@@ -180,9 +177,9 @@ void read_genbank(const char *filename, unsigned int n, sequence *seq);
  * \param rng    A random number generator. 
  * \return       'A', 'T', 'C', or 'G'.
  */
-char dna_random_nuc(gsl_rng *rng)
+char dna_random_nuc(well1024 *rng)
 {
-    return "ATGC"[(int)(gsl_rng_uniform(rng) * 4)];
+    return "ATGC"[(int)(well1024_next_double(rng) * 4)];
 }
 
 /**
@@ -197,9 +194,9 @@ char dna_random_nuc(gsl_rng *rng)
  * \param prob_g   Probability of 'G'.
  * \return         'A', 'T', 'C', or 'G'.
  */
-char dna_random_nuc_prob(gsl_rng *rng, double prob_a, double prob_t, double prob_g)
+char dna_random_nuc_prob(well1024 *rng, double prob_a, double prob_t, double prob_g)
 {
-    const double r = gsl_rng_uniform(rng);
+    const double r = well1024_next_double(rng);
     if (r < prob_a)
     {
         return 'A';
@@ -225,15 +222,16 @@ char dna_random_nuc_prob(gsl_rng *rng, double prob_a, double prob_t, double prob
  * \param seq_size   The length of the resulting sequence.
  * \return           A sequence of 'A', 'T', 'C', or 'G'.
  */
-char *dna_random_nuc_seq(gsl_rng *rng, int seq_size)
+char *dna_random_nuc_seq(well1024 *rng, unsigned int seq_size)
 {
     assert(seq_size > 0);
     char *dna_seq = (char*)malloc(seq_size + 1);
     char nuc[4 + 1] = "ATGC";
-    
-    for (int i = 0; i < seq_size; ++i)
+
+    unsigned int i = 0;
+    for (; i < seq_size; ++i)
     {
-        dna_seq[i] = nuc[(int)(gsl_rng_uniform(rng) * 4)];
+        dna_seq[i] = nuc[(int)(well1024_next_double(rng) * 4)];
     }
     dna_seq[seq_size] = '\0';
     return dna_seq;
@@ -245,9 +243,9 @@ char *dna_random_nuc_seq(gsl_rng *rng, int seq_size)
  * \param rng    A random number generator. 
  * \return       'A', 'U', 'C', or 'G'.
  */
-char rna_random_nuc(gsl_rng *rng)
+char rna_random_nuc(well1024 *rng)
 {
-    return "AUGC"[(int)(gsl_rng_uniform(rng) * 4)];
+    return "AUGC"[(int)(well1024_next_double(rng) * 4)];
 }
 
 /**
@@ -255,16 +253,16 @@ char rna_random_nuc(gsl_rng *rng)
  *
  * Return a random nucleotide with given probabilities (with the probability for
  * C = 1 - prob(A + U + G)).
- * 
+ *
  * \param rng      A random number generator.
  * \param prob_a   Probability of 'A'.
  * \param prob_t   Probability of 'U'.
  * \param prob_g   Probability of 'G'.
  * \return         'A', 'U', 'C', or 'G'.
  */
-char rna_random_nuc_prob(gsl_rng *rng, double prob_a, double prob_u, double prob_g)
+char rna_random_nuc_prob(well1024 *rng, double prob_a, double prob_u, double prob_g)
 {
-    const double r = gsl_rng_uniform(rng);
+    const double r = well1024_next_double(rng);
     if (r < prob_a)
     {
         return 'A';
@@ -290,15 +288,16 @@ char rna_random_nuc_prob(gsl_rng *rng, double prob_a, double prob_u, double prob
  * \param seq_size   The length of the resulting sequence.
  * \return           A sequence of 'A', 'U', 'C', or 'G'.
  */
-char* rna_random_nuc_seq(gsl_rng *rng, int seq_size)
+char* rna_random_nuc_seq(well1024 *rng, unsigned int seq_size)
 {
     assert(seq_size > 0);
     char *rna_seq = (char*)malloc(seq_size + 1);
     char nuc[4 + 1] = "AUGC";
-    
-    for (int i = 0; i < seq_size; ++i)
+
+    unsigned int i = 0;
+    for (; i < seq_size; ++i)
     {
-        rna_seq[i] = nuc[(int)(gsl_rng_uniform(rng) * 4)];
+        rna_seq[i] = nuc[(int)(well1024_next_double(rng) * 4)];
     }
     rna_seq[seq_size] = '\0';
     return rna_seq;
@@ -316,7 +315,10 @@ unsigned int seq_count(const char *seq, const char c)
     unsigned int count = 0;
     while (seq[++i] != '\0')
     {
-        count += (seq[i] == c);
+        if (seq[i] == c)
+        {
+            ++count;
+        }
     }
     return count;
 }
@@ -466,8 +468,9 @@ char *dna_rmv_amb(char *dna_seq)
 {
     char *new_dna_seq = (char*)malloc(strlen(dna_seq));
 
-    int count = 0;
-    for (int i = 0; dna_seq[i] != '\0'; i++)
+    unsigned int count = 0;
+    int i = 0;
+    for (; dna_seq[i] != '\0'; i++)
     {
         if (DNANUC(dna_seq[i]))
         {
@@ -490,8 +493,9 @@ char *rna_rmv_amb(char *rna_seq)
 {
     char *new_rna_seq = (char*)malloc(strlen(rna_seq));
 
-    int count = 0;
-    for (int i = 0; rna_seq[i] != '\0'; i++)
+    unsigned int count = 0;
+    int i = 0;
+    for (; rna_seq[i] != '\0'; i++)
     {
         if (RNANUC(rna_seq[i]))
         {
@@ -512,11 +516,12 @@ char *rna_rmv_amb(char *rna_seq)
  */
 char *dna_antisense(const char *dna_seq)
 {
-    assert(dna_pure_seq(char *dna_seq));
+    assert(dna_pure_seq(dna_seq));
     const int seq_len = strlen(dna_seq);
     char *dna_antisense = (char*)malloc(seq_len + 1);
 
-    for (int i = 0; i < seq_len; ++i)
+    int i = 0;
+    for (; i < seq_len; ++i)
     {
         if (dna_seq[i] == 'T')
         {
@@ -550,11 +555,12 @@ char *dna_antisense(const char *dna_seq)
  */
 char* transcription(const char* dna_seq)
 {
-    assert(dna_pure_seq(const char *dna_seq));
+    assert(dna_pure_seq(dna_seq));
     const int seq_len = strlen(dna_seq);
     char* rna_seq = (char*)malloc(seq_len + 1);
 
-    for (int i = 0; i < seq_len; ++i)
+    int i = 0;
+    for (; i < seq_len; ++i)
     {
         if (dna_seq[i] == 'T')
         {
@@ -577,14 +583,14 @@ char* transcription(const char* dna_seq)
  */
 char *translation(const char *rna_seq)
 {
-    assert(rna_pure_seq(rna_seq);
+    assert(rna_pure_seq(rna_seq));
     const unsigned int n_amino = strlen(rna_seq) / 3;
     char* amino_seq = (char*)malloc(n_amino + 1);
 
     unsigned int i = 0, a = 0;
     while (a < n_amino)
-    #ifdef CUSTOMCODE
     {
+#ifdef CUSTOMCODE
         if (rna_seq[i] == 'U')
         {
             if (rna_seq[i + 1] == 'U')
@@ -901,7 +907,7 @@ char *translation(const char *rna_seq)
                 }
             }
         }
-        #else
+#else
         if (rna_seq[i] == 'U')
         {
             if (rna_seq[i + 1] == 'U')
@@ -1038,23 +1044,13 @@ char *translation(const char *rna_seq)
                 amino_seq[a] = 'G';
             }
         }
-        #endif
+#endif
         i += 3;
         ++a;
     }
     amino_seq[n_amino] = '\0';
     return amino_seq;
 }
-
-/**
- * \brief Return true if the char is a standard DNA nucleotide.
- */
-#define DNANUC(c) (c=='A'||c=='T'||c=='G'||c=='C')
-
-/**
- * \brief Return true if the char is a standard RNA nucleotide.
- */
-#define RNANUC(c) (c=='A'||c=='U'||c=='G'||c=='C')
 
 #ifdef __cplusplus
 }
